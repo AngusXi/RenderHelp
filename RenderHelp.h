@@ -950,7 +950,8 @@ public:
 
 	// 读取 BMP 图片，支持 24/32 位两种格式
 	inline static Bitmap* LoadFile(const char *filename) {
-		FILE *fp = fopen(filename, "rb");
+		FILE* fp = NULL;
+		fopen_s(&fp, filename, "rb");
 		if (fp == NULL) return NULL;
 		BITMAPINFOHEADER info;
 		uint8_t header[14];
@@ -980,7 +981,8 @@ public:
 
 	// 保存 BMP 图片
 	inline bool SaveFile(const char *filename, bool withAlpha = false) const {
-		FILE *fp = fopen(filename, "wb");
+		FILE* fp = NULL;
+		fopen_s(&fp, filename, "wb");
 		if (fp == NULL) return false;
 		BITMAPINFOHEADER info;
 		uint32_t pixelsize = (withAlpha)? 4 : 3;
@@ -1323,7 +1325,7 @@ public:
 		Vec2i p2 = vtx[2]->spi;
 
 		// 计算面积，为零就退出
-		float s = Abs(vector_cross(p1 - p0, p2 - p0));
+		float s = (float)Abs(vector_cross(p1 - p0, p2 - p0));
 		if (s <= 0) return false;
 
 		// 三角形填充时，左面和上面的边上的点需要包括，右方和下方边上的点不包括
